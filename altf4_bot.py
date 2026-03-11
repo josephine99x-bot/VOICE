@@ -86,13 +86,21 @@ async def check_events():
 async def probarvoz(ctx):
 
     if ctx.author.voice is None:
-        await ctx.send("Entrá a un canal de voz primero.")
+        await ctx.send("⚠️ Tenés que estar en un canal de voz.")
         return
 
     canal = ctx.author.voice.channel
-    vc = await canal.connect()
 
-    tts = gTTS("Prueba de voz del bot Alt F4", lang="es")
+    # si ya está conectado lo movemos
+    if ctx.voice_client:
+        vc = ctx.voice_client
+        await vc.move_to(canal)
+    else:
+        vc = await canal.connect()
+
+    await ctx.send("🔊 Probando voz...")
+
+    tts = gTTS("Prueba de voz del bot Alt F cuatro", lang="es")
     tts.save("test.mp3")
 
     vc.play(discord.FFmpegPCMAudio(executable="ffmpeg", source="test.mp3"))
@@ -130,6 +138,7 @@ Participantes:
 """)
 
 bot.run(TOKEN)
+
 
 
 
