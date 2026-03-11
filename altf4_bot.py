@@ -50,7 +50,7 @@ async def anunciar_en_voz(mensaje):
             tts = gTTS(mensaje, lang="es")
             tts.save("evento.mp3")
 
-            vc.play(discord.FFmpegPCMAudio("evento.mp3"))
+            vc.play(discord.FFmpegPCMAudio(executable="ffmpeg", source="evento.mp3"))
 
             while vc.is_playing():
                 await asyncio.sleep(1)
@@ -85,18 +85,17 @@ async def check_events():
 @bot.command()
 async def probarvoz(ctx):
 
-    if not ctx.author.voice:
-        await ctx.send("Tenés que estar en un canal de voz.")
+    if ctx.author.voice is None:
+        await ctx.send("Entrá a un canal de voz primero.")
         return
 
     canal = ctx.author.voice.channel
-
     vc = await canal.connect()
 
-    tts = gTTS("Esto es una prueba del sistema de voz del bot Alt F4", lang="es")
+    tts = gTTS("Prueba de voz del bot Alt F4", lang="es")
     tts.save("test.mp3")
 
-    vc.play(discord.FFmpegPCMAudio("test.mp3"))
+    vc.play(discord.FFmpegPCMAudio(executable="ffmpeg", source="test.mp3"))
 
     while vc.is_playing():
         await asyncio.sleep(1)
@@ -131,5 +130,6 @@ Participantes:
 """)
 
 bot.run(TOKEN)
+
 
 
