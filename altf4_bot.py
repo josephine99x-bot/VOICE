@@ -80,10 +80,14 @@ async def check_events():
         await channel.send("@everyone 👑 King of MU comienza en 10 minutos!")
         await anunciar_en_voz("King of Mu comienza en diez minutos")
 
+
 @bot.command()
 async def probarvoz(ctx):
     await ctx.send("Probando anuncio en voz...")
     await anunciar_en_voz("Esto es una prueba del sistema de voz del bot Alt F4")
+
+
+@bot.command()
 async def ruleta(ctx, *jugadores):
 
     if len(jugadores) < 2:
@@ -109,6 +113,5 @@ Participantes:
 
 🏆 **GANADOR:** {ganador}
 """)
-
 
 bot.run(TOKEN)
