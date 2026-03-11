@@ -86,6 +86,26 @@ async def probarvoz(ctx):
     await ctx.send("Probando anuncio en voz...")
     await anunciar_en_voz("Esto es una prueba del sistema de voz del bot Alt F4")
 
+@bot.command()
+async def probarvoz(ctx):
+
+    if not ctx.author.voice:
+        await ctx.send("Tenés que estar en un canal de voz.")
+        return
+
+    canal = ctx.author.voice.channel
+
+    vc = await canal.connect()
+
+    tts = gTTS("Esto es una prueba del sistema de voz del bot Alt F4", lang="es")
+    tts.save("test.mp3")
+
+    vc.play(discord.FFmpegPCMAudio("test.mp3"))
+
+    while vc.is_playing():
+        await asyncio.sleep(1)
+
+    await vc.disconnect()
 
 @bot.command()
 async def ruleta(ctx, *jugadores):
@@ -115,3 +135,4 @@ Participantes:
 """)
 
 bot.run(TOKEN)
+
