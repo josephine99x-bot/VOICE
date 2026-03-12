@@ -1,0 +1,8 @@
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+startCommand = "python altf4_bot.py"
+
+[nixpacks]
+packages = ["ffmpeg"]
