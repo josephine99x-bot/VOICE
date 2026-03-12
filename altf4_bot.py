@@ -87,32 +87,30 @@ async def check_events():
 
 
 @bot.command()
-async def probarvoz(ctx):
+async def anunciar_en_voz(mensaje):
 
-    if ctx.author.voice is None:
-        await ctx.send("⚠️ Tenés que estar en un canal de voz.")
-        return
+    guild = bot.guilds[0]
 
-    canal = ctx.author.voice.channel
+    for canal in guild.voice_channels:
 
-    if ctx.voice_client:
-        vc = ctx.voice_client
-        await vc.move_to(canal)
-    else:
-        vc = await canal.connect()
+        if len(canal.members) > 0:
 
-    await ctx.send("🔊 Probando voz...")
+            if bot.voice_clients:
+                vc = bot.voice_clients[0]
+                await vc.move_to(canal)
+            else:
+                vc = await canal.connect()
 
-    tts = gTTS("Prueba de voz del bot Alt F cuatro", lang="es")
-    tts.save("test.mp3")
+            tts = gTTS(mensaje, lang="es")
+            tts.save("evento.mp3")
 
-    vc.play(discord.FFmpegPCMAudio(source="test.mp3"))
+            vc.play(discord.FFmpegPCMAudio(source="evento.mp3"))
 
-    while vc.is_playing():
-        await asyncio.sleep(1)
+            while vc.is_playing():
+                await asyncio.sleep(1)
 
-    await vc.disconnect()
-
+            await vc.disconnect()
+            await asyncio.sleep(2)
 
 @bot.command()
 async def ruleta(ctx, *jugadores):
@@ -143,5 +141,6 @@ Participantes:
 
 
 bot.run(TOKEN)
+
 
 
