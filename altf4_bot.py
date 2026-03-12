@@ -55,7 +55,7 @@ async def anunciar_en_voz(mensaje):
             tts = gTTS(mensaje, lang="es")
             tts.save("evento.mp3")
 
-            vc.play(discord.FFmpegPCMAudio(executable="/usr/bin/ffmpeg", source="evento.mp3"))
+            vc.play(discord.FFmpegPCMAudio(source="test.mp3"))
 
             while vc.is_playing():
                 await asyncio.sleep(1)
@@ -143,3 +143,4 @@ Participantes:
 
 
 bot.run(TOKEN)
+
