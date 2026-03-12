@@ -45,17 +45,12 @@ async def anunciar_en_voz(mensaje):
     for canal in bot.guilds[0].voice_channels:
 
         if len(canal.members) > 0:
-
-            if bot.voice_clients:
-                vc = bot.voice_clients[0]
-                await vc.move_to(canal)
-            else:
-                vc = await canal.connect()
+            vc = await canal.connect()
 
             tts = gTTS(mensaje, lang="es")
-            tts.save("evento.mp3")
+            tts.save("voz.mp3")
 
-            vc.play(discord.FFmpegPCMAudio(source="test.mp3"))
+            vc.play(discord.FFmpegPCMAudio("voz.mp3"))
 
             while vc.is_playing():
                 await asyncio.sleep(1)
@@ -87,8 +82,9 @@ async def check_events():
 
 
 @bot.command()
-async def anunciar_en_voz(mensaje):
-
+async def probarvoz(ctx):
+    await anunciar_en_voz("Prueba de voz del bot")
+   
     guild = bot.guilds[0]
 
     for canal in guild.voice_channels:
@@ -141,6 +137,7 @@ Participantes:
 
 
 bot.run(TOKEN)
+
 
 
 
