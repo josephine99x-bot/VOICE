@@ -106,7 +106,7 @@ async def probarvoz(ctx):
     tts = gTTS("Prueba de voz del bot Alt F cuatro", lang="es")
     tts.save("test.mp3")
 
-    vc.play(discord.FFmpegPCMAudio(executable="/usr/bin/ffmpeg", source="test.mp3"))
+    vc.play(discord.FFmpegPCMAudio(source="test.mp3"))
 
     while vc.is_playing():
         await asyncio.sleep(1)
@@ -143,4 +143,5 @@ Participantes:
 
 
 bot.run(TOKEN)
+
 
