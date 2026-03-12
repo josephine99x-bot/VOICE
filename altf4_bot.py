@@ -4,6 +4,7 @@ import random
 import asyncio
 from discord.ext import tasks, commands
 from datetime import datetime, timedelta
+from gtts import gTTS
 
 TOKEN = os.getenv("TOKEN")
 CHANNEL_ID = 1479700883444076596
@@ -16,11 +17,12 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 blood_start = (4, 0)
 devil_start = (4, 30)
 interval = 120
-
 king_hour = 20
+
 
 def now_local():
     return datetime.utcnow() - timedelta(hours=3)
+
 
 def next_event(start_hour, start_minute):
     now = now_local()
@@ -31,13 +33,12 @@ def next_event(start_hour, start_minute):
 
     return start_today
 
+
 @bot.event
 async def on_ready():
     print(f"Bot conectado como {bot.user}")
     check_events.start()
 
-import asyncio
-from gtts import gTTS
 
 async def anunciar_en_voz(mensaje):
 
@@ -45,23 +46,27 @@ async def anunciar_en_voz(mensaje):
 
         if len(canal.members) > 0:
 
-            vc = await canal.connect()
+            if bot.voice_clients:
+                vc = bot.voice_clients[0]
+                await vc.move_to(canal)
+            else:
+                vc = await canal.connect()
 
             tts = gTTS(mensaje, lang="es")
             tts.save("evento.mp3")
 
-            vc.play(discord.FFmpegPCMAudio(executable="ffmpeg", source="evento.mp3"))
+            vc.play(discord.FFmpegPCMAudio(executable="/usr/bin/ffmpeg", source="evento.mp3"))
 
             while vc.is_playing():
                 await asyncio.sleep(1)
 
             await vc.disconnect()
-
-            await asyncio.sleep(2)  # pequeño delay para evitar errores
+            await asyncio.sleep(2)
 
 
 @tasks.loop(minutes=1)
 async def check_events():
+
     channel = bot.get_channel(CHANNEL_ID)
     now = now_local()
 
@@ -79,7 +84,6 @@ async def check_events():
     if now.hour == 19 and now.minute == 50:
         await channel.send("@everyone 👑 King of MU comienza en 10 minutos!")
         await anunciar_en_voz("King of Mu comienza en diez minutos")
-
 
 
 @bot.command()
@@ -109,6 +113,7 @@ async def probarvoz(ctx):
 
     await vc.disconnect()
 
+
 @bot.command()
 async def ruleta(ctx, *jugadores):
 
@@ -136,10 +141,5 @@ Participantes:
 🏆 **GANADOR:** {ganador}
 """)
 
+
 bot.run(TOKEN)
-
-
-
-
-
-
