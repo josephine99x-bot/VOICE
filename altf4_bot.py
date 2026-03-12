@@ -6,7 +6,7 @@ from discord.ext import tasks, commands
 from datetime import datetime, timedelta
 from gtts import gTTS
 
-TOKEN = os.getenv("TOKEN")
+TOKEN = os.environ["TOKEN"]
 CHANNEL_ID = 1479700883444076596
 
 intents = discord.Intents.default()
@@ -141,6 +141,7 @@ Participantes:
 
 
 bot.run(TOKEN)
+
 
 
 
