@@ -1,0 +1,1 @@
+worker: python altf4_bot.py
