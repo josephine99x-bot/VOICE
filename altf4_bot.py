@@ -91,7 +91,6 @@ async def probarvoz(ctx):
 
     canal = ctx.author.voice.channel
 
-    # si ya está conectado lo movemos
     if ctx.voice_client:
         vc = ctx.voice_client
         await vc.move_to(canal)
@@ -103,8 +102,9 @@ async def probarvoz(ctx):
     tts = gTTS("Prueba de voz del bot Alt F cuatro", lang="es")
     tts.save("test.mp3")
 
-   vc.play(discord.FFmpegPCMAudio(executable="/usr/bin/ffmpeg", source="test.mp3"))
+    vc.play(discord.FFmpegPCMAudio(executable="/usr/bin/ffmpeg", source="test.mp3"))
 
+    while vc.is_playing():
         await asyncio.sleep(1)
 
     await vc.disconnect()
@@ -137,6 +137,7 @@ Participantes:
 """)
 
 bot.run(TOKEN)
+
 
 
 
